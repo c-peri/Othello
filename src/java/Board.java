@@ -19,8 +19,8 @@ class Board {
     /*
         Constructor:
         Initializes the first board of the game,
-        by placing the four black and white discks in the center of the board.
-     */
+        by placing the four black and white discs in the center of the board.
+    */
     public Board() {
 
         this.lastMove = new Move();
@@ -58,6 +58,12 @@ class Board {
 
     }
 
+    /*
+        Prints the board of the game using:
+        + ● : to represent the white discs on the board
+        + ○ : to represent the black discs on the board
+        + - : to represent the empty spots on the board
+    */
     public void print() {
 
         System.out.println("\n    A B C D E F G H" +
@@ -79,6 +85,71 @@ class Board {
 
         System.out.println("  └─────────────────┘");
 
+    }
+
+    //Make a move; it places a letter in the board
+    public void makeMove(int row, int col, int letter) {
+        this.gameBoard[row][col] = letter;
+        this.lastMove = new Move(row, col);
+        this.lastPlayer = letter;
+    }
+
+    /*
+        Method to check whether a move is valid.If:
+        -The square isn't empty => invalid
+        -The square doesn't meet the criteria of Othello => invalid
+        -The square is out of bounds => invalid
+    */
+    public boolean isValidMove(int row, int col) {
+        if((row > 7) || (col > 7) || (row < 0) || (col < 0)) return false;
+        if(this.gameBoard[row][col] != EMPTY) return false;
+
+        //Check horizontaly for a valid move
+        if(col + 2 <= 7){ //Checks for a left valid move
+          if (this.gameBoard[row][col+1] == lastPlayer && (this.gameBoard[row][col+2] != lastPlayer && this.gameBoard[row][col+2] != EMPTY)){
+              return true;
+          }
+        }
+        if(col - 2 >= 0){ //Checks for a right valid move
+            if (this.gameBoard[row][col-1] == lastPlayer && (this.gameBoard[row][col-2] != lastPlayer && this.gameBoard[row][col-2] != EMPTY)){
+                return true;
+            }
+        }
+
+        //Check vertically for a valid move
+        if(row + 2 <= 7){ //Checks for a bottom valid move
+            if (this.gameBoard[row+1][col] == lastPlayer && (this.gameBoard[row+2][col] != lastPlayer && this.gameBoard[row+2][col] != EMPTY)){
+                return true;
+            }
+        }
+        if(row - 2 >= 0){ //Checks for a top valid move
+            if (this.gameBoard[row-1][col] == lastPlayer && (this.gameBoard[row-2][col] != lastPlayer && this.gameBoard[row-2][col] != EMPTY)){
+                return true;
+            }
+        }
+
+        //Check diagonally for a valid move
+        if (row + 2 <=7 && col - 2 >= 0){ //Checks for a top right move
+            if (this.gameBoard[row+1][col-1] == lastPlayer && (this.gameBoard[row+2][col-2] != lastPlayer && this.gameBoard[row+2][col-2] != EMPTY)){
+                return true;
+            }
+        }
+        if (row + 2 <=7 && col + 2 <= 7){ //Checks for a top left move
+            if (this.gameBoard[row+1][col+1] == lastPlayer && (this.gameBoard[row+2][col+2] != lastPlayer && this.gameBoard[row+2][col+2] != EMPTY)){
+                return true;
+            }
+        }
+        if (row - 2 >= 0 && col - 2 >= 0){ //Checks for a bottom right move
+            if (this.gameBoard[row-1][col-1] == lastPlayer && (this.gameBoard[row-2][col-2] != lastPlayer && this.gameBoard[row-2][col-2] != EMPTY)){
+                return true;
+            }
+        }
+        if (row - 2 >=0 && col + 2 <= 7){ //Checks for a bottom left move
+            if (this.gameBoard[row-1][col+1] == lastPlayer && (this.gameBoard[row-2][col+2] != lastPlayer && this.gameBoard[row-2][col+2] != EMPTY)){
+                return true;
+            }
+        }
+        return false;
     }
 
     ArrayList<Board> getChildren(int letter) {return null;}
@@ -103,13 +174,11 @@ class Board {
     }
 
     void setGameBoard(int[][] gameBoard) {
-
         for(int i = 0; i < this.dimension; i++) {
             for(int j = 0; j < this.dimension; j++) {
                 this.gameBoard[i][j] = gameBoard[i][j];
             }
         }
-
     }
 
     void setLastMove(Move lastMove) {
