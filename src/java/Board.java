@@ -16,6 +16,11 @@ class Board {
 
     private final int dimension = 8;
 
+    /*
+        Constructor:
+        Initializes the first board of the game,
+        by placing the four black and white discks in the center of the board.
+     */
     public Board() {
 
         this.lastMove = new Move();
@@ -55,23 +60,24 @@ class Board {
 
     public void print() {
 
-        System.out.println("\n    A B C D E F G H\n   -----------------");
+        System.out.println("\n    A B C D E F G H" +
+                           "\n  ┌─────────────────┐");
 
         for(int row = 0; row < this.dimension; row++) {
-            System.out.print((row+1)+" | ");
+            System.out.print((row+1)+" │ ");
             for(int col = 0; col < this.dimension; col++) {
                 switch (this.gameBoard[row][col]) {
-                    case W -> System.out.print("\u25CB ");
-                    case B -> System.out.print("\u25CF ");
+                    case W -> System.out.print("● ");
+                    case B -> System.out.print("○ ");
                     case EMPTY -> System.out.print("- ");
                     default -> {
                     }
                 }
             }
-            System.out.println("|");
+            System.out.println("│");
         }
 
-        System.out.println("   -----------------");
+        System.out.println("  └─────────────────┘");
 
     }
 
