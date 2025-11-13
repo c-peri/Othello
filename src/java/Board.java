@@ -49,7 +49,7 @@ class Board
     public void print() {
         System.out.println("  A B C D E F G H");
         for(int row = 0; row < 8; row++) {
-            System.out.print((row+1)" |");
+            System.out.print((row+1)+" |");
             for(int col = 0; col < 8; col++) {
                 switch (this.gameBoard[row][col]) {
                     case W -> System.out.print("⦿ ");
