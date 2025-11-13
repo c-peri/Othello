@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 
-class Board
-{
+class Board {
+
+    //For the black and white circles of the board to show in cmd we need to run "chcp 65001" first.
+
     public static final int W = 1;
     public static final int B = -1;
     public static final int EMPTY = 0;
@@ -12,48 +14,55 @@ class Board
 
     private Move lastMove;
 
-    private int dimension;
+    private final int dimension = 8;
 
     public Board() {
+
         this.lastMove = new Move();
         this.lastPlayer = 0;
-        this.gameBoard = new int[8][8];
-        for(int i = 0; i < this.gameBoard.length; i++)
-        {
-            for(int j = 0; j < this.gameBoard.length; j++)
-            if(i == 3) {
-                this.gameBoard[i][3] = W;
-                this.gameBoard[i][4] = B;
-            } else if(i == 4) {
-                this.gameBoard[i][3] = B;
-                this.gameBoard[i][4] = W;
-            } else {
-                this.gameBoard[i][j] = EMPTY;
+        this.gameBoard = new int[dimension][dimension];
+
+        for(int i = 0; i < this.dimension; i++) {
+            for(int j = 0; j < this.dimension; j++) {
+                if (i == 3) {
+                    this.gameBoard[i][3] = W;
+                    this.gameBoard[i][4] = B;
+                } else if (i == 4) {
+                    this.gameBoard[i][3] = B;
+                    this.gameBoard[i][4] = W;
+                } else {
+                    this.gameBoard[i][j] = EMPTY;
+                }
             }
         }
+
     }
 
     // copy constructor
     public Board(Board board) {
+
         this.lastMove = board.lastMove;
         this.lastPlayer = board.lastPlayer;
-        this.gameBoard = new int[8][8];
+        this.gameBoard = new int[dimension][dimension];
+
         for(int i = 0; i < this.gameBoard.length; i++) {
-            for(int j = 0; j < this.gameBoard.length; j++)
-            {
+            for(int j = 0; j < this.gameBoard.length; j++) {
                 this.gameBoard[i][j] = board.gameBoard[i][j];
             }
         }
+
     }
 
     public void print() {
+
         System.out.println("\n    A B C D E F G H\n   -----------------");
-        for(int row = 0; row < 8; row++) {
+
+        for(int row = 0; row < this.dimension; row++) {
             System.out.print((row+1)+" | ");
-            for(int col = 0; col < 8; col++) {
+            for(int col = 0; col < this.dimension; col++) {
                 switch (this.gameBoard[row][col]) {
-                    case W -> System.out.print("⦿ ");
-                    case B -> System.out.print("⦾ ");
+                    case W -> System.out.print("\u25CB ");
+                    case B -> System.out.print("\u25CF ");
                     case EMPTY -> System.out.print("- ");
                     default -> {
                     }
@@ -61,7 +70,9 @@ class Board
             }
             System.out.println("|");
         }
+
         System.out.println("   -----------------");
+
     }
 
     ArrayList<Board> getChildren(int letter) {return null;}
@@ -85,19 +96,17 @@ class Board
         return this.gameBoard;
     }
 
-    void setGameBoard(int[][] gameBoard)
-    {
-        for(int i = 0; i < this.dimension; i++)
-        {
-            for(int j = 0; j < this.dimension; j++)
-            {
+    void setGameBoard(int[][] gameBoard) {
+
+        for(int i = 0; i < this.dimension; i++) {
+            for(int j = 0; j < this.dimension; j++) {
                 this.gameBoard[i][j] = gameBoard[i][j];
             }
         }
+
     }
 
-    void setLastMove(Move lastMove)
-    {
+    void setLastMove(Move lastMove) {
         this.lastMove.setRow(lastMove.getRow());
         this.lastMove.setCol(lastMove.getCol());
         this.lastMove.setValue(lastMove.getValue());
