@@ -47,9 +47,9 @@ class Board
     }
 
     public void print() {
-        System.out.println("  A B C D E F G H");
+        System.out.println("\n    A B C D E F G H\n   -----------------");
         for(int row = 0; row < 8; row++) {
-            System.out.print((row+1)" |");
+            System.out.print((row+1)+" | ");
             for(int col = 0; col < 8; col++) {
                 switch (this.gameBoard[row][col]) {
                     case W -> System.out.print("⦿ ");
@@ -58,10 +58,10 @@ class Board
                     default -> {
                     }
                 }
-                System.out.println("|");
             }
-            System.out.println(" ----------------");
+            System.out.println("|");
         }
+        System.out.println("   -----------------");
     }
 
     ArrayList<Board> getChildren(int letter) {return null;}
