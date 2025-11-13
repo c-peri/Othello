@@ -14,7 +14,18 @@ class Board
 
     private int dimension;
 
-    public Board() {}
+    public Board() {
+        this.lastMove = new Move();
+        this.lastPlayer = 0;
+        this.gameBoard = new int[8][8];
+        for(int i = 0; i < this.gameBoard.length; i++)
+        {
+            for(int j = 0; j < this.gameBoard.length; j++)
+            {
+                this.gameBoard[i][j] = EMPTY;
+            }
+        }
+    }
 
     // copy constructor
     public Board(Board board) {}
