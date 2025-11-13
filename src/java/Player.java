@@ -1,12 +1,11 @@
-class Player
-{
+class Player {
+
     private int maxDepth;
     private int playerLetter;
 
     public Player() {}
 
-    public Player(int maxDepth, int playerLetter)
-    {
+    public Player(int maxDepth, int playerLetter) {
         this.maxDepth = maxDepth;
         this.playerLetter = playerLetter;
     }
@@ -16,4 +15,5 @@ class Player
     public Move max(Board board, int depth) {return null;}
 
     public Move min(Board board, int depth) {return null;}
+
 }

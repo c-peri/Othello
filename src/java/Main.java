@@ -1,9 +1,9 @@
 
-public class Main
-{
-    public static void main(String[] args)
-    {
-        //We create the players and the board
+public class Main {
+
+    public static void main(String[] args) {
+
+        //We create the players and the first board
         //MaxDepth for the MiniMax algorithm is set to 2; feel free to change the values
         Player playerW = new Player(2, Board.W);
         Player playerB = new Player(2, Board.B);
@@ -11,4 +11,5 @@ public class Main
         board.print();
 
     }
+
 }

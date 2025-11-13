@@ -4,9 +4,9 @@ class Board {
 
     //For the black and white circles of the board to show in cmd we need to run "chcp 65001" first.
 
-    public static final int W = 1;
-    public static final int B = -1;
-    public static final int EMPTY = 0;
+    public static final int W = 1;      //If score > 0 => white is ahead
+    public static final int B = -1;     //If score < 0 => black is ahead
+    public static final int EMPTY = 0;  //If score = 0 => the game is tied
 
     private int[][] gameBoard;
 
@@ -22,8 +22,8 @@ class Board {
         this.lastPlayer = 0;
         this.gameBoard = new int[dimension][dimension];
 
-        for(int i = 0; i < this.dimension; i++) {
-            for(int j = 0; j < this.dimension; j++) {
+        for(int i = 0; i < this.gameBoard.length; i++) {
+            for(int j = 0; j < this.gameBoard.length; j++) {
                 if (i == 3) {
                     this.gameBoard[i][3] = W;
                     this.gameBoard[i][4] = B;

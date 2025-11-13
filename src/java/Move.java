@@ -1,32 +1,28 @@
-public class Move
-{
+public class Move {
+
     private int row;
     private int col;
     private int value;
 
-    Move()
-    {
+    Move() {
         this.row = -1;
         this.col = -1;
         this.value = 0;
     }
 
-    Move(int row, int col)
-    {
+    Move(int row, int col) {
         this.row = row;
         this.col = col;
         this.value = -1;
     }
 
-    Move(int value)
-    {
+    Move(int value) {
         this.row = -1;
         this.col = -1;
         this.value = value;
     }
 
-    Move(int row, int col, int value)
-    {
+    Move(int row, int col, int value) {
         this.row = row;
         this.col = col;
         this.value = value;
@@ -61,4 +57,5 @@ public class Move
     {
         this.value = value;
     }
+
 }
