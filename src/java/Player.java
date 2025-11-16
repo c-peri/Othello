@@ -1,3 +1,8 @@
+/*
+ * @author Alexandra-Maria Mazi || p3220111@aueb.gr
+ * @author Christina Perifana   || p3220160@aueb.gr
+ */
+
 class Player {
 
     private int maxDepth;
@@ -10,10 +15,10 @@ class Player {
         this.playerLetter = playerLetter;
     }
 
-    public Move MiniMax(Board board) {return null;}
+    public Move MiniMax(Board board) { return null; }
 
-    public Move max(Board board, int depth) {return null;}
+    public Move max(Board board, int depth) { return null; }
 
-    public Move min(Board board, int depth) {return null;}
+    public Move min(Board board, int depth) { return null; }
 
 }

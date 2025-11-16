@@ -1,3 +1,8 @@
+/*
+ * @author Alexandra-Maria Mazi || p3220111@aueb.gr
+ * @author Christina Perifana   || p3220160@aueb.gr
+ */
+
 public class Move {
 
     private int row;

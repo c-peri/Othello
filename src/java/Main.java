@@ -1,3 +1,8 @@
+/*
+ * @author Alexandra-Maria Mazi || p3220111@aueb.gr
+ * @author Christina Perifana   || p3220160@aueb.gr
+ */
+
 import java.util.Scanner;
 
 public class Main {
@@ -25,10 +30,9 @@ public class Main {
                         break;
                     }
                 }
-                if (!forfeit){
-                    break;
-                }
+                if (!forfeit) break;
             }
+
             //If both of the players need to forfeit their turn the game ends, since the board is considered terminal
             if (forfeit){
                 forfeit_counter++;
@@ -97,7 +101,6 @@ public class Main {
                 }
 
             }
-            //If White played last, then Black plays now
             
         }
 

@@ -1,5 +1,13 @@
+/*
+ * @author Alexandra-Maria Mazi || p3220111@aueb.gr
+ * @author Christina Perifana   || p3220160@aueb.gr
+ */
+
 import java.util.ArrayList;
 
+/**
+ * Board class represents the 8x8 board of the game Othello.
+ */
 class Board {
 
     /*
@@ -19,11 +27,12 @@ class Board {
 
     private final int dimension = 8;
 
-    /*
-        Constructor:
-        Initializes the first board of the game,
-        by placing the four black and white discs in the center of the board.
-    */
+    /**
+     * Constructor. Initializes the first board of the game,
+     * by placing the four black and white discs in the center of the board.
+     *
+     * @return
+     */
     public Board() {
 
         this.lastMove = new Move();
@@ -48,7 +57,11 @@ class Board {
 
     }
 
-    // copy constructor
+    /**
+     * Constructor. Used solely for copying the board
+     *
+     * @return
+     */
     public Board(Board board) {
 
         this.lastMove = board.lastMove;
@@ -61,12 +74,14 @@ class Board {
 
     }
 
-    /*
-        Prints the board of the game using:
-        + ● : to represent the white discs on the board
-        + ○ : to represent the black discs on the board
-        + - : to represent the empty spots on the board
-    */
+    /**
+     * Printing method. Used to print the board of the game using:
+     * ● : to represent the white discs on the board
+     * ○ : to represent the black discs on the board
+     * - : to represent the empty spots on the board
+     *
+     * @return
+     */
     public void print() {
 
         System.out.println("──────────────────────────────────────────────────────────"+
@@ -92,31 +107,40 @@ class Board {
 
     }
 
-    //Make a move; it places a letter in the board
-    void makeMove(int row, int col, int letter) {
+    /**
+     * Method to make a move on the board by placing a letter on the board.
+     *
+     * @return
+     */
+    public void makeMove(int row, int col, int letter) {
         this.gameBoard[row][col] = letter;
         this.lastMove = new Move(row, col);
         this.lastPlayer = letter;
     }
 
-    /*
-        Method to check whether a move is valid. If:
-        -The square isn't empty => invalid
-        -The square doesn't meet the criteria of Othello => invalid
-        -The square is out of bounds => invalid
-    */
+    /**
+     * Method to check whether a move is valid. If:
+     * The square isn't empty => invalid
+     * The square doesn't meet the criteria of Othello => invalid
+     * The square is out of bounds => invalid
+     *
+     * @param row : the row of the move we want to check
+     * @param col : the column of the move we want to check
+     * @return boolean
+     */
     public boolean isValidMove(int row, int col) {
 
         if((row > 7) || (col > 7) || (row < 0) || (col < 0)) return false;
         if (this.gameBoard[row][col] != EMPTY) return false;
 
-        int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
+        int[] rows = {-1, -1, -1, 0, 0, 1, 1, 1}; //Row commands for every single one of the 8 directions that need to be tested
+        int[] cols = {-1, 0, 1, -1, 1, -1, 0, 1}; //Column commands for every single one of the 8 directions that need to be tested
 
-        int r, c, fr, fc;
-        for (int d = 0; d < 8; d++) {
-            r = row + dr[d];
-            c = col + dc[d];
+        int r, c;
+        for (int d = 0; d <= 7; d++) {
+
+            r = row + rows[d];
+            c = col + cols[d];
             boolean opponentFound = false;
 
             while (r >= 0 && r <= 7 && c >= 0 && c <= 7 && this.gameBoard[r][c] != EMPTY) {
@@ -128,11 +152,12 @@ class Board {
                 } else {
                     break;
                 }
-                r += dr[d];
-                c += dc[d];
+                r += rows[d];
+                c += cols[d];
             }
 
         }
+
         return false;
 
     }
@@ -144,7 +169,7 @@ class Board {
         for(int row = 0; row <= 7; row++){
             for(int col = 0; col <= 7; col++){
                 if (isValidMove(row,col)){
-                    Board newBoard = new Board(this);   // copy constructor
+                    Board newBoard = new Board(this);
                     newBoard.makeMove(row, col, letter);
                     newBoard.flipOppDiscs(row,col,letter);
                     children.add(newBoard);
@@ -156,22 +181,28 @@ class Board {
 
     }
 
-    /*
-        Method to flip the opponents. For each of the 8 directions of the move, we will run along the path until:
-        1) We find a disc of the same colour => we flip all the in between discs of the opposite colour
-        2) We reach an EMPTY spot => we end the search of that path
-        3) We reach out of bounds => we end the search of that path
-    */
+    /**
+     * Method to flip the opponent's discs. For each of the 8 directions of the move, we will run along the path until:
+     * We find a disc of the same colour => we flip all the in between discs of the opposite colour
+     * We reach an EMPTY spot => end the search of that path
+     * We reach out of bounds => end the search of that path
+     *
+     * @param row : the row of the move
+     * @param col : the column of the move
+     * @param letter : the letter of the player we want to turn the discs to
+     * @return
+     */
     public void flipOppDiscs(int row, int col, int letter){
 
-        int[] dr = {-1,-1,-1,0,0,1,1,1};
-        int[] dc = {-1,0,1,-1,1,-1,0,1};
+        int[] rows = { -1, -1, -1, 0, 0, 1, 1, 1}; //Row commands for every single one of the 8 directions that need to be tested
+        int[] cols = { -1, 0, 1, -1, 1, -1, 0, 1}; //Column commands for every single one of the 8 directions that need to be tested
 
         int r,c,fr,fc;
         boolean opponentFound;
-        for (int d = 0; d < 8; d++) {
-            r = row + dr[d];
-            c = col + dc[d];
+        for (int d = 0; d <= 7; d++) {
+
+            r = row + rows[d];
+            c = col + cols[d];
             opponentFound = false;
 
             while (r >= 0 && r <= 7 && c >= 0 && c <= 7 && this.gameBoard[r][c] != EMPTY) {
@@ -180,25 +211,25 @@ class Board {
                 } else if (gameBoard[r][c] == letter) {
                     if (opponentFound) {
                         // flip back
-                        fr = r - dr[d];
-                        fc = c - dc[d];
+                        fr = r - rows[d];
+                        fc = c - cols[d];
                         while (fr != row || fc != col) {
                             this.gameBoard[fr][fc] = letter;
-                            fr -= dr[d];
-                            fc -= dc[d];
+                            fr -= rows[d];
+                            fc -= cols[d];
                         }
                         break;
                     }
                     break;
                 }
-                r += dr[d];
-                c += dc[d];
+                r += rows[d];
+                c += cols[d];
             }
         }
 
     }
 
-    public int evaluate () {return 0;}
+    public int evaluate () { return 0; }
 
     public boolean isTerminal() {
         //The board is considered terminal if there are no more empty spaces to place discs in
@@ -212,20 +243,11 @@ class Board {
         return true;
     }
 
-    public Move getLastMove()
-    {
-        return this.lastMove;
-    }
+    public Move getLastMove(){ return this.lastMove; }
 
-    public int getLastPlayer()
-    {
-        return this.lastPlayer;
-    }
+    public int getLastPlayer(){ return this.lastPlayer; }
 
-    public int[][] getGameBoard()
-    {
-        return this.gameBoard;
-    }
+    public int[][] getGameBoard(){ return this.gameBoard; }
 
     void setGameBoard(int[][] gameBoard) {
         for(int i = 0; i < this.dimension; i++) {
@@ -239,6 +261,6 @@ class Board {
         this.lastMove.setValue(lastMove.getValue());
     }
 
-    void setLastPlayer(int lastPlayer){ this.lastPlayer = lastPlayer;}
+    void setLastPlayer(int lastPlayer){ this.lastPlayer = lastPlayer; }
 
 }
