@@ -57,6 +57,7 @@ public class Main {
                     //Making the move depending on if it's valid or not
                     if (board.isValidMove(row_int,col_int)){
                         board.makeMove(row_int,col_int,-1);
+                        board.flipOppDiscs(row_int, col_int, -1);
                         board.setLastMove(new Move(row_int,col_int));
                         board.setLastPlayer(-1);
                         System.out.println("──────────────────────────────────────────────────────────");
@@ -64,12 +65,36 @@ public class Main {
                     } else {
                         System.out.println("Invalid move! Please make a new move");
                     }
-
-                    //case Board.B:
-                    //System.out.println("────────────────White player make your move───────────────");
                 }
-                //case Board.B:
-                    //System.out.println("────────────────White player make your move───────────────");
+                case Board.B -> {
+                    System.out.println("────────────────White player make your move───────────────");
+                    System.out.print("Insert a row: ");
+                    String row = in.nextLine();
+                    while (!row.matches("[1-8]")) {
+                        System.out.print("Invalid row! Please enter a number from 1 to 8: ");
+                        row = in.nextLine();
+                    }
+                    int row_int = Integer.parseInt(row)-1;
+                    System.out.print("Insert a column: ");
+                    String col = in.nextLine();
+                    while (!col.matches("[A-H]")) {
+                        System.out.print("Invalid column! Please enter a letter from A to H: ");
+                        col = in.nextLine();
+                    }
+                    int col_int = col.charAt(0) - 'A';
+
+                    //Making the move depending on if it's valid or not
+                    if (board.isValidMove(row_int,col_int)){
+                        board.makeMove(row_int,col_int,1);
+                        board.flipOppDiscs(row_int, col_int, 1);
+                        board.setLastMove(new Move(row_int,col_int));
+                        board.setLastPlayer(1);
+                        System.out.println("──────────────────────────────────────────────────────────");
+                        board.print();
+                    } else {
+                        System.out.println("Invalid move! Please make a new move");
+                    }
+                }
 
             }
             //If White played last, then Black plays now

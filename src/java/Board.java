@@ -108,59 +108,95 @@ class Board {
     public boolean isValidMove(int row, int col) {
 
         if((row > 7) || (col > 7) || (row < 0) || (col < 0)) return false;
-        if(this.gameBoard[row][col] != EMPTY) return false;
+        if (this.gameBoard[row][col] != EMPTY) return false;
 
-        //Check horizontally for a valid move
-        if (col + 2 <= 7){ //Checks for a left valid move
-            if (this.gameBoard[row][col+1] == lastPlayer && (this.gameBoard[row][col+2] != lastPlayer && this.gameBoard[row][col+2] != EMPTY)){
-              return true;
-          }
-        }
-        if(col - 2 >= 0){ //Checks for a right valid move
-            if (this.gameBoard[row][col-1] == lastPlayer && (this.gameBoard[row][col-2] != lastPlayer && this.gameBoard[row][col-2] != EMPTY)){
-                return true;
-            }
-        }
+        int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dc = {-1, 0, 1, -1, 1, -1, 0, 1};
 
-        //Check vertically for a valid move
-        if(row + 2 <= 7){ //Checks for a bottom valid move
-            if (this.gameBoard[row+1][col] == lastPlayer && (this.gameBoard[row+2][col] != lastPlayer && this.gameBoard[row+2][col] != EMPTY)){
-                return true;
-            }
-        }
-        if(row - 2 >= 0){ //Checks for a top valid move
-            if (this.gameBoard[row-1][col] == lastPlayer && (this.gameBoard[row-2][col] != lastPlayer && this.gameBoard[row-2][col] != EMPTY)){
-                return true;
-            }
-        }
+        int r, c, fr, fc;
+        for (int d = 0; d < 8; d++) {
+            r = row + dr[d];
+            c = col + dc[d];
+            boolean opponentFound = false;
 
-        //Check diagonally for a valid move
-        if (row + 2 <=7 && col - 2 >= 0){ //Checks for a top right move
-            if (this.gameBoard[row+1][col-1] == lastPlayer && (this.gameBoard[row+2][col-2] != lastPlayer && this.gameBoard[row+2][col-2] != EMPTY)){
-                return true;
+            while (r >= 0 && r <= 7 && c >= 0 && c <= 7 && this.gameBoard[r][c] != EMPTY) {
+                if (this.gameBoard[r][c] == this.lastPlayer) {
+                    opponentFound = true;
+                } else if (gameBoard[r][c] == -this.lastPlayer) {
+                    if (opponentFound) return true;
+                    break;
+                } else {
+                    break;
+                }
+                r += dr[d];
+                c += dc[d];
             }
-        }
-        if (row + 2 <=7 && col + 2 <= 7){ //Checks for a top left move
-            if (this.gameBoard[row+1][col+1] == lastPlayer && (this.gameBoard[row+2][col+2] != lastPlayer && this.gameBoard[row+2][col+2] != EMPTY)){
-                return true;
-            }
-        }
-        if (row - 2 >= 0 && col - 2 >= 0){ //Checks for a bottom right move
-            if (this.gameBoard[row-1][col-1] == lastPlayer && (this.gameBoard[row-2][col-2] != lastPlayer && this.gameBoard[row-2][col-2] != EMPTY)){
-                return true;
-            }
-        }
-        if (row - 2 >=0 && col + 2 <= 7){ //Checks for a bottom left move
-            if (this.gameBoard[row-1][col+1] == lastPlayer && (this.gameBoard[row-2][col+2] != lastPlayer && this.gameBoard[row-2][col+2] != EMPTY)){
-                return true;
-            }
-        }
 
+        }
         return false;
 
     }
 
-    ArrayList<Board> getChildren(int letter) {return null;}
+    public ArrayList<Board> getChildren(int letter) {
+
+        ArrayList<Board> children = new ArrayList<>();
+
+        for(int row = 0; row <= 7; row++){
+            for(int col = 0; col <= 7; col++){
+                if (isValidMove(row,col)){
+                    Board newBoard = new Board(this);   // copy constructor
+                    newBoard.makeMove(row, col, letter);
+                    newBoard.flipOppDiscs(row,col,letter);
+                    children.add(newBoard);
+                }
+            }
+        }
+
+        return children;
+
+    }
+
+    /*
+        Method to flip the opponents. For each of the 8 directions of the move, we will run along the path until:
+        1) We find a disc of the same colour => we flip all the in between discs of the opposite colour
+        2) We reach an EMPTY spot => we end the search of that path
+        3) We reach out of bounds => we end the search of that path
+    */
+    public void flipOppDiscs(int row, int col, int letter){
+
+        int[] dr = {-1,-1,-1,0,0,1,1,1};
+        int[] dc = {-1,0,1,-1,1,-1,0,1};
+
+        int r,c,fr,fc;
+        boolean opponentFound;
+        for (int d = 0; d < 8; d++) {
+            r = row + dr[d];
+            c = col + dc[d];
+            opponentFound = false;
+
+            while (r >= 0 && r <= 7 && c >= 0 && c <= 7 && this.gameBoard[r][c] != EMPTY) {
+                if (this.gameBoard[r][c] == -letter) {
+                    opponentFound = true;
+                } else if (gameBoard[r][c] == letter) {
+                    if (opponentFound) {
+                        // flip back
+                        fr = r - dr[d];
+                        fc = c - dc[d];
+                        while (fr != row || fc != col) {
+                            this.gameBoard[fr][fc] = letter;
+                            fr -= dr[d];
+                            fc -= dc[d];
+                        }
+                        break;
+                    }
+                    break;
+                }
+                r += dr[d];
+                c += dc[d];
+            }
+        }
+
+    }
 
     public int evaluate () {return 0;}
 
@@ -193,9 +229,7 @@ class Board {
 
     void setGameBoard(int[][] gameBoard) {
         for(int i = 0; i < this.dimension; i++) {
-            for(int j = 0; j < this.dimension; j++) {
-                this.gameBoard[i][j] = gameBoard[i][j];
-            }
+            System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, this.dimension);
         }
     }
 
@@ -205,9 +239,6 @@ class Board {
         this.lastMove.setValue(lastMove.getValue());
     }
 
-    void setLastPlayer(int lastPlayer)
-    {
-        this.lastPlayer = lastPlayer;
-    }
+    void setLastPlayer(int lastPlayer){ this.lastPlayer = lastPlayer;}
 
 }
