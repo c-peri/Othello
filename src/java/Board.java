@@ -35,12 +35,16 @@ class Board {
      */
     public Board() {
 
+        //Setting the last player as White since black plays first, as well as setting the dimensions
         this.lastMove = new Move();
         this.lastPlayer = 1;
         this.gameBoard = new int[dimension][dimension];
 
+        //Filling every square of the board
         for(int i = 0; i < this.gameBoard.length; i++) {
             for(int j = 0; j < this.gameBoard.length; j++) {
+
+                //If we are at the center of the board fill the squares accordingly, else set as empty
                 switch (i) {
                     case 3 -> {
                         this.gameBoard[i][3] = W;
@@ -52,6 +56,7 @@ class Board {
                     }
                     default -> this.gameBoard[i][j] = EMPTY;
                 }
+
             }
         }
 
@@ -74,49 +79,13 @@ class Board {
 
     }
 
-    /**
-     * Printing method. Used to print the board of the game using:
-     * ● : to represent the white discs on the board
-     * ○ : to represent the black discs on the board
-     * - : to represent the empty spots on the board
-     *
-     * @return
-     */
-    public void print() {
+    public void setLastPlayer(int lastPlayer){ this.lastPlayer = lastPlayer; }
 
-        System.out.println("──────────────────────────────────────────────────────────"+
-                           "\n                       A B C D E F G H" +
-                           "\n                     ┌─────────────────┐");
+    public Move getLastMove(){ return this.lastMove; }
 
-        for(int row = 0; row < this.dimension; row++) {
-            System.out.print("                   "+(row+1)+" │ ");
-            for(int col = 0; col < this.dimension; col++) {
-                switch (this.gameBoard[row][col]) {
-                    case W -> System.out.print("● ");
-                    case B -> System.out.print("○ ");
-                    case EMPTY -> System.out.print("- ");
-                    default -> {
-                    }
-                }
-            }
-            System.out.println("│");
-        }
+    public int getLastPlayer(){ return this.lastPlayer; }
 
-        System.out.println("                     └─────────────────┘"+
-                           "\n──────────────────────────────────────────────────────────");
-
-    }
-
-    /**
-     * Method to make a move on the board by placing a letter on the board.
-     *
-     * @return
-     */
-    public void makeMove(int row, int col, int letter) {
-        this.gameBoard[row][col] = letter;
-        this.lastMove = new Move(row, col);
-        this.lastPlayer = letter;
-    }
+    public int[][] getGameBoard(){ return this.gameBoard; }
 
     /**
      * Method to check whether a move is valid. If:
@@ -130,54 +99,45 @@ class Board {
      */
     public boolean isValidMove(int row, int col) {
 
-        if((row > 7) || (col > 7) || (row < 0) || (col < 0)) return false;
+        if((row >= this.dimension) || (col >= this.dimension) || (row < 0) || (col < 0)) return false;
         if (this.gameBoard[row][col] != EMPTY) return false;
 
         int[] rows = {-1, -1, -1, 0, 0, 1, 1, 1}; //Row commands for every single one of the 8 directions that need to be tested
         int[] cols = {-1, 0, 1, -1, 1, -1, 0, 1}; //Column commands for every single one of the 8 directions that need to be tested
 
         int r, c;
+
+        //Trying every single one of the 8 directions
         for (int d = 0; d <= 7; d++) {
 
             r = row + rows[d];
             c = col + cols[d];
             boolean opponentFound = false;
 
-            while (r >= 0 && r <= 7 && c >= 0 && c <= 7 && this.gameBoard[r][c] != EMPTY) {
-                if (this.gameBoard[r][c] == this.lastPlayer) {
+            //Making sure we are not out of bounds or in an empty square
+            while (r >= 0 && r < this.gameBoard.length && c >= 0 && c < this.gameBoard.length && this.gameBoard[r][c] != EMPTY) {
+
+                if (this.gameBoard[r][c] == this.lastPlayer) { //We have reached an opponents disc
                     opponentFound = true;
-                } else if (gameBoard[r][c] == -this.lastPlayer) {
+                } else if (gameBoard[r][c] == -this.lastPlayer) { //We have reached one of our own discs
+
+                    //Testing to see if we have found an opponents disc so we make the move valid
                     if (opponentFound) return true;
+
                     break;
+
                 } else {
                     break;
                 }
+
                 r += rows[d];
                 c += cols[d];
+
             }
 
         }
 
         return false;
-
-    }
-
-    public ArrayList<Board> getChildren(int letter) {
-
-        ArrayList<Board> children = new ArrayList<>();
-
-        for(int row = 0; row <= 7; row++){
-            for(int col = 0; col <= 7; col++){
-                if (isValidMove(row,col)){
-                    Board newBoard = new Board(this);
-                    newBoard.makeMove(row, col, letter);
-                    newBoard.flipOppDiscs(row,col,letter);
-                    children.add(newBoard);
-                }
-            }
-        }
-
-        return children;
 
     }
 
@@ -199,18 +159,24 @@ class Board {
 
         int r,c,fr,fc;
         boolean opponentFound;
+
+        //Trying every single one of the 8 directions
         for (int d = 0; d <= 7; d++) {
 
             r = row + rows[d];
             c = col + cols[d];
             opponentFound = false;
 
-            while (r >= 0 && r <= 7 && c >= 0 && c <= 7 && this.gameBoard[r][c] != EMPTY) {
-                if (this.gameBoard[r][c] == -letter) {
+            //Making sure we are not out of bounds or in an empty square
+            while (r >= 0 && r < this.gameBoard.length && c >= 0 && c < this.gameBoard.length && this.gameBoard[r][c] != EMPTY) {
+
+                if (this.gameBoard[r][c] == -letter) { //We have reached an opponents disc
                     opponentFound = true;
-                } else if (gameBoard[r][c] == letter) {
+                } else if (gameBoard[r][c] == letter) { //We have reached one of our own discs
+
+                    //Testing to see if we have found an opponents disc that we need to flip
                     if (opponentFound) {
-                        // flip back
+                        //Flipping all of the opponents dics until we reach our own
                         fr = r - rows[d];
                         fc = c - cols[d];
                         while (fr != row || fc != col) {
@@ -218,49 +184,144 @@ class Board {
                             fr -= rows[d];
                             fc -= cols[d];
                         }
+
                         break;
+
                     }
+
                     break;
+
                 }
+
                 r += rows[d];
                 c += cols[d];
+
+            }
+
+        }
+
+    }
+
+    /**
+     * Method to make a move on the board by placing a letter on the board.
+     *
+     * @return
+     */
+    public void makeMove(int row, int col, int letter) {
+        this.gameBoard[row][col] = letter;
+        this.lastMove = new Move(row, col);
+        this.lastPlayer = letter;
+    }
+
+    /**
+     * Method that generates all possible board states (children),
+     * resulting from the next legal moves.
+     *
+     * @param letter : the letter of the player making the move
+     * @return children : a list of Board type objects, each representing a valid next position
+     */
+    public ArrayList<Board> getChildren(int letter) {
+
+        //The list being returned
+        ArrayList<Board> children = new ArrayList<>();
+
+        //Trying every square on the board
+        for(int row = 0; row < this.gameBoard.length; row++){
+            for(int col = 0; col < this.gameBoard.length; col++){
+
+                //Testing to see if the move is valid, in order to add to the list, make the move and flip the discs
+                if (isValidMove(row,col)){
+                    Board newBoard = new Board(this);
+                    newBoard.makeMove(row, col, letter);
+                    newBoard.flipOppDiscs(row,col,letter);
+                    children.add(newBoard);
+                }
+
             }
         }
+
+        return children;
 
     }
 
     public int evaluate () { return 0; }
 
-    public boolean isTerminal() {
-        //The board is considered terminal if there are no more empty spaces to place discs in
-        for (int row = 0; row <= 7; row++){
-            for (int col = 0; col <= 7; col++){
-                if (this.gameBoard[row][col] == EMPTY){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public Move getLastMove(){ return this.lastMove; }
-
-    public int getLastPlayer(){ return this.lastPlayer; }
-
-    public int[][] getGameBoard(){ return this.gameBoard; }
-
-    void setGameBoard(int[][] gameBoard) {
-        for(int i = 0; i < this.dimension; i++) {
-            System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, this.dimension);
-        }
-    }
-
-    void setLastMove(Move lastMove) {
+    /**
+     * Method to fully set a move in the gameboard
+     *
+     * @param lastMove : the Move type object we want to set into the board
+     * @return
+     */
+    public void setLastMove(Move lastMove) {
         this.lastMove.setRow(lastMove.getRow());
         this.lastMove.setCol(lastMove.getCol());
         this.lastMove.setValue(lastMove.getValue());
     }
 
-    void setLastPlayer(int lastPlayer){ this.lastPlayer = lastPlayer; }
+    /**
+     * Method to perform a deep copy of the 8x8 board into the current Board type object
+     *
+     * @param gameBoard : the 2D array representing a board state to copy into this board
+     * @return
+     */
+    public void setGameBoard(int[][] gameBoard) {
+        for(int i = 0; i < this.dimension; i++) {
+            System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, this.dimension);
+        }
+    }
+
+    /**
+     * Method to test if the board is terminal, and thus the game ends.
+     * If there are no more empty squares to place discs in => terminal
+     *
+     * @return boolean
+     */
+    public boolean isTerminal() {
+
+        //Testing every square of the board until we find one that isn't empty
+        for (int[] gameBoard1 : this.gameBoard) {
+            for (int col = 0; col < this.gameBoard.length; col++) {
+                if (gameBoard1[col] == EMPTY) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Printing method. Used to print the board of the game using:
+     * ● : to represent the white discs on the board
+     * ○ : to represent the black discs on the board
+     * - : to represent the empty spots on the board
+     *
+     * @return
+     */
+    public void print() {
+
+        System.out.println("──────────────────────────────────────────────────────────"+
+                "\n                       A B C D E F G H" +
+                "\n                     ┌─────────────────┐");
+
+        for(int row = 0; row < this.dimension; row++) {
+            System.out.print("                   "+(row+1)+" │ ");
+            for(int col = 0; col < this.dimension; col++) {
+                switch (this.gameBoard[row][col]) {
+                    case W -> System.out.print("● ");
+                    case B -> System.out.print("○ ");
+                    case EMPTY -> System.out.print("- ");
+                    default -> {
+                    }
+                }
+            }
+            System.out.println("│");
+        }
+
+        System.out.println("                     └─────────────────┘"+
+                "\n──────────────────────────────────────────────────────────");
+
+    }
 
 }
