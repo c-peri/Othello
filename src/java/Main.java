@@ -18,6 +18,34 @@ public class Main {
         Board board = new Board();
         board.print();
 
+        String pl = ""; 
+        System.out.println("─────────Choose the colour you want to play with──────────");
+    
+        while (true) {
+
+            System.out.println("● : White player \n○ : Black player");
+            System.out.print("> ");
+            pl = in.nextLine().trim();
+
+            if (pl.equalsIgnoreCase("White") || pl.equalsIgnoreCase("Black")) {
+                break;
+            }
+
+            System.out.println("Invalid input! Please choose one of the following players");
+
+        }
+        Player pc;
+        int pcLetter;
+
+        if (pl.equalsIgnoreCase("White")) {
+            pc = playerB;          // computer is black
+            pcLetter = Board.B;
+        } else {
+            pc = playerW;          // computer is white
+            pcLetter = Board.W;
+        }
+
+        int discs = 4; //The discs already on the board
         int forfeit_counter = 0;
         while (!board.isTerminal() && forfeit_counter < 2){
 
@@ -34,70 +62,102 @@ public class Main {
             }
 
             //If both of the players need to forfeit their turn the game ends, since the board is considered terminal
-            if (forfeit){
-                forfeit_counter++;
-            } else {
-                forfeit_counter = 0;
-            }
+            forfeit_counter = forfeit ? forfeit_counter + 1 : 0;
 
             switch (board.getLastPlayer()){
                 case Board.W -> {
-                    System.out.println("────────────────Black player make your move───────────────");
-                    System.out.print("Insert a row: ");
-                    String row = in.nextLine();
-                    while (!row.matches("[1-8]")) {
-                        System.out.print("Invalid row! Please enter a number from 1 to 8: ");
-                        row = in.nextLine();
-                    }
-                    int row_int = Integer.parseInt(row)-1;
-                    System.out.print("Insert a column: ");
-                    String col = in.nextLine();
-                    while (!col.matches("[A-H]")) {
-                        System.out.print("Invalid column! Please enter a letter from A to H: ");
-                        col = in.nextLine();
-                    }
-                    int col_int = col.charAt(0) - 'A';
+                    if (pl.equalsIgnoreCase("Black")){
+                        System.out.println("────────────────Black player make your move───────────────");
+                        System.out.print("Insert a row: ");
+                        String row = in.nextLine();
+                        while (!row.matches("[1-8]")) {
+                            System.out.print("Invalid row! Please enter a number from 1 to 8: ");
+                            row = in.nextLine();
+                        }
+                        int row_int = Integer.parseInt(row)-1;
+                        System.out.print("Insert a column: ");
+                        String col = in.nextLine();
+                        while (!col.matches("[A-H]")) {
+                            System.out.print("Invalid column! Please enter a letter from A to H: ");
+                            col = in.nextLine();
+                        }
+                        int col_int = col.charAt(0) - 'A';
 
-                    //Making the move depending on if it's valid or not
-                    if (board.isValidMove(row_int,col_int)){
-                        board.makeMove(row_int,col_int,-1);
-                        board.flipOppDiscs(row_int, col_int, -1);
-                        board.setLastMove(new Move(row_int,col_int));
-                        board.setLastPlayer(-1);
-                        System.out.println("──────────────────────────────────────────────────────────");
-                        board.print();
+                        //Making the move depending on if it's valid or not
+                        if (board.isValidMove(row_int,col_int)){
+                            board.makeMove(row_int,col_int,-1);
+                            board.flipOppDiscs(row_int, col_int, -1);
+                            board.setLastMove(new Move(row_int,col_int));
+                            board.setLastPlayer(-1);
+                            System.out.println("──────────────────────────────────────────────────────────");
+                            board.print();
+                            discs++;
+                        } else {
+                            System.out.println("Invalid move! Please make a new move");
+                        }
                     } else {
-                        System.out.println("Invalid move! Please make a new move");
+                        pc.increaseDepth(discs);
+                        Move best = pc.MiniMax(board);
+
+                        int row = best.getRow();
+                        int col = best.getCol();
+
+                        board.makeMove(row, col, pcLetter);
+                        board.flipOppDiscs(row, col, pcLetter);
+                        board.setLastMove(best);
+                        board.setLastPlayer(pcLetter);
+
+                        discs++;
+                        board.print();
                     }
+                    
                 }
                 case Board.B -> {
-                    System.out.println("────────────────White player make your move───────────────");
-                    System.out.print("Insert a row: ");
-                    String row = in.nextLine();
-                    while (!row.matches("[1-8]")) {
-                        System.out.print("Invalid row! Please enter a number from 1 to 8: ");
-                        row = in.nextLine();
-                    }
-                    int row_int = Integer.parseInt(row)-1;
-                    System.out.print("Insert a column: ");
-                    String col = in.nextLine();
-                    while (!col.matches("[A-H]")) {
-                        System.out.print("Invalid column! Please enter a letter from A to H: ");
-                        col = in.nextLine();
-                    }
-                    int col_int = col.charAt(0) - 'A';
+                    if (pl.equalsIgnoreCase("White")){
+                        System.out.println("────────────────White player make your move───────────────");
+                        System.out.print("Insert a row: ");
+                        String row = in.nextLine();
+                        while (!row.matches("[1-8]")) {
+                            System.out.print("Invalid row! Please enter a number from 1 to 8: ");
+                            row = in.nextLine();
+                        }
+                        int row_int = Integer.parseInt(row)-1;
+                        System.out.print("Insert a column: ");
+                        String col = in.nextLine();
+                        while (!col.matches("[A-H]")) {
+                            System.out.print("Invalid column! Please enter a letter from A to H: ");
+                            col = in.nextLine();
+                        }
+                        int col_int = col.charAt(0) - 'A';
 
-                    //Making the move depending on if it's valid or not
-                    if (board.isValidMove(row_int,col_int)){
-                        board.makeMove(row_int,col_int,1);
-                        board.flipOppDiscs(row_int, col_int, 1);
-                        board.setLastMove(new Move(row_int,col_int));
-                        board.setLastPlayer(1);
-                        System.out.println("──────────────────────────────────────────────────────────");
-                        board.print();
+                        //Making the move depending on if it's valid or not
+                        if (board.isValidMove(row_int,col_int)){
+                            board.makeMove(row_int,col_int,1);
+                            board.flipOppDiscs(row_int, col_int, 1);
+                            board.setLastMove(new Move(row_int,col_int));
+                            board.setLastPlayer(1);
+                            System.out.println("──────────────────────────────────────────────────────────");
+                            board.print();
+                            discs++;
+                        } else {
+                            System.out.println("Invalid move! Please make a new move");
+                        }
                     } else {
-                        System.out.println("Invalid move! Please make a new move");
+                        pc.increaseDepth(discs);
+                        Move best = pc.MiniMax(board);
+
+                        int row = best.getRow();
+                        int col = best.getCol();
+
+                        board.makeMove(row, col, pcLetter);
+                        board.flipOppDiscs(row, col, pcLetter);
+                        board.setLastMove(best);
+                        board.setLastPlayer(pcLetter);
+
+                        discs++;
+                        board.print();
                     }
+
                 }
 
             }

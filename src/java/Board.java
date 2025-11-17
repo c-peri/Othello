@@ -244,7 +244,25 @@ class Board {
 
     }
 
-    public int evaluate () { return 0; }
+    /**
+     * Method that calculates the game board evaluation by summing the values from all the squares. For every square:
+     * White disc => +1
+     * Black disc => -1
+     * Empty disc => 0
+     *
+     * @return score : the total evaluation of the game board
+     */
+    public int evaluate () {
+
+        int score = 0;
+        //For every square on the board
+        for (int i = 0; i < this.gameBoard.length; i++) {
+            for (int j = 0; j < this.gameBoard.length; j++) {
+                score += this.gameBoard[i][j];
+            }
+        }
+        return score;
+    }
 
     /**
      * Method to fully set a move in the gameboard
