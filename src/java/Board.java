@@ -12,7 +12,7 @@ class Board {
 
     /*
         For the black and white circles of the board,as well as the lines,
-        to show in cmd we need to run "chcp 65001" first.
+        to show in cmd we need to run "999" first.
     */
 
     public static final int W = 1;      //If score > 0 => white is ahead

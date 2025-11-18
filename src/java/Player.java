@@ -28,17 +28,6 @@ class Player {
     }
 
     /**
-     * Method to increase the maxDepth as the game goes on,
-     * based on how many moves have been made
-     *
-     * @param movesPlayed : the amount of moves on the board
-     * @return
-     */
-    public void increaseDepth(int movesPlayed) {
-        this.maxDepth = Math.min(6, 4 + (movesPlayed / 10));
-    }
-
-    /**
      * Method that implements the MiniMax algorithm and starts at depth 0.
      * White => mazimixing player
      * Black => minimizing player
