@@ -20,7 +20,11 @@ public class Main {
         while (true){
             try {
                 max_depth = Integer.parseInt(depth);
-                break;
+                if (max_depth <= 0){
+                    System.out.println("Invalid input! Please insert the max depth");
+                    System.out.print("> ");
+                    depth = in.nextLine();
+                } else break;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input type! Please insert the max depth");
                 System.out.print("> ");
@@ -46,9 +50,7 @@ public class Main {
             System.out.print("> ");
             pl = in.nextLine().trim();
 
-            if (pl.equalsIgnoreCase("White") || pl.equalsIgnoreCase("Black")) {
-                break;
-            }
+            if (pl.equalsIgnoreCase("White") || pl.equalsIgnoreCase("Black")) break;
 
             System.out.println("Invalid input! Please choose one of the following players");
 
@@ -233,21 +235,13 @@ public class Main {
         }
 
         System.out.println("─────────────────────────GAME OVER────────────────────────");
-        if (board.evaluate() > 0){
-            if (pl.equalsIgnoreCase("White")){
-                System.out.println("                 Congratulations! You won!                ");
-            } else {
-                System.out.println("             You lost! Better luck next time!             ");
-            }
-        } else if ( board.evaluate() < 0){
-            if (pl.equalsIgnoreCase("White")){
-                System.out.println("             You lost! Better luck next time!             ");
-            } else {
-                System.out.println("                 Congratulations! You won!                ");
-            }
+        if (board.evaluate() == 0) {
+            System.out.println("                    The game is tied!");
         } else {
-            System.out.println("                    The game is tied!                     ");
-        } 
+            boolean playerWon = (board.evaluate() > 0 && pl.equalsIgnoreCase("White")) || (board.evaluate() < 0 && !pl.equalsIgnoreCase("White"));
+            System.out.println(playerWon ? "                 Congratulations! You won!" : "             You lost! Better luck next time!");
+        }
+
         System.out.println("──────────────────────────────────────────────────────────");
 
     }

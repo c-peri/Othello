@@ -12,7 +12,7 @@ class Board {
 
     /*
         For the black and white circles of the board,as well as the lines,
-        to show in cmd we need to run "999" first.
+        to show in cmd we need to run "chcp 65001" first.
     */
 
     public static final int W = 1;      //If score > 0 => white is ahead
@@ -313,7 +313,8 @@ class Board {
      * Printing method. Used to print the board of the game using:
      * ● : to represent the white discs on the board
      * ○ : to represent the black discs on the board
-     * - : to represent the empty spots on the board
+     * - : to represent the empty non valid squares on the board
+     * ⁙ : to represent the empty valid squares on the board
      *
      * @return
      */
@@ -324,12 +325,12 @@ class Board {
                 "\n                     ┌─────────────────┐");
 
         for(int row = 0; row < this.dimension; row++) {
-            System.out.print("                   "+(row+1)+" │ ");
+            System.out.print("                   " + (row+1) + " │ ");
             for(int col = 0; col < this.dimension; col++) {
                 switch (this.gameBoard[row][col]) {
                     case W -> System.out.print("● ");
                     case B -> System.out.print("○ ");
-                    case EMPTY -> System.out.print("- ");
+                    case EMPTY -> System.out.print(isValidMove(row, col) ? "⁙ " : "- ");
                     default -> {
                     }
                 }
