@@ -36,13 +36,10 @@ class Player {
      * @return the best move determined by the MiniMax evaluation
      */
     public Move MiniMax(Board board) {
-        if (playerLetter == Board.W){
-            //If white player plays => maximize the heuristics value
-            return max(new Board(board), 0);
-        } else {
-            //If black player plays => minimize the heuristics value
-            return min(new Board(board), 0);
-        }
+
+        Board newBoard = new Board(board);
+        return (playerLetter == Board.W) ? max(newBoard, 0) : min(newBoard, 0);
+
     }
 
     /**
@@ -65,7 +62,6 @@ class Player {
 
         ArrayList<Board> children = board.getChildren(Board.W);
 
-        // No moves → pass turn
         if (children.isEmpty()) {
             Move m = min(board, depth + 1);
             return m;
@@ -75,13 +71,11 @@ class Player {
 
         for (Board child : children) {
             Move result = min(child, depth + 1);
-
-            if (result.getValue() > bestMove.getValue()) {
-                bestMove = new Move(child.getLastMove().getRow(), child.getLastMove().getCol(), result.getValue());
-            }
+            if (result.getValue() > bestMove.getValue()) bestMove = new Move(child.getLastMove().getRow(), child.getLastMove().getCol(), result.getValue());
         }
 
         return bestMove;
+
     }
 
     /**
@@ -113,13 +107,11 @@ class Player {
 
         for (Board child : children) {
             Move result = max(child, depth + 1);
-
-            if (result.getValue() < bestMove.getValue()) {
-                bestMove = new Move(child.getLastMove().getRow(), child.getLastMove().getCol(), result.getValue());
-            }
+            if (result.getValue() < bestMove.getValue()) bestMove = new Move(child.getLastMove().getRow(), child.getLastMove().getCol(), result.getValue());
         }
 
         return bestMove;
+
     }
     
 }

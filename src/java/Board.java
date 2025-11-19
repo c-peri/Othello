@@ -79,13 +79,13 @@ class Board {
 
     }
 
-    public void setLastPlayer(int lastPlayer){ this.lastPlayer = lastPlayer; }
+    public void setLastPlayer(int lastPlayer) { this.lastPlayer = lastPlayer; }
 
-    public Move getLastMove(){ return this.lastMove; }
+    public Move getLastMove() { return this.lastMove; }
 
-    public int getLastPlayer(){ return this.lastPlayer; }
+    public int getLastPlayer() { return this.lastPlayer; }
 
-    public int[][] getGameBoard(){ return this.gameBoard; }
+    public int[][] getGameBoard() { return this.gameBoard; }
 
     /**
      * Method to check whether a move is valid. If:
@@ -152,7 +152,7 @@ class Board {
      * @param letter : the letter of the player we want to turn the discs to
      * @return
      */
-    public void flipOppDiscs(int row, int col, int letter){
+    public void flipOppDiscs(int row, int col, int letter) {
 
         int[] rows = { -1, -1, -1, 0, 0, 1, 1, 1}; //Row commands for every single one of the 8 directions that need to be tested
         int[] cols = { -1, 0, 1, -1, 1, -1, 0, 1}; //Column commands for every single one of the 8 directions that need to be tested
@@ -226,11 +226,11 @@ class Board {
         ArrayList<Board> children = new ArrayList<>();
 
         //Trying every square on the board
-        for(int row = 0; row < this.gameBoard.length; row++){
-            for(int col = 0; col < this.gameBoard.length; col++){
+        for(int row = 0; row < this.gameBoard.length; row++) {
+            for(int col = 0; col < this.gameBoard.length; col++) {
 
                 //Testing to see if the move is valid, in order to add to the list, make the move and flip the discs
-                if (isValidMove(row,col)){
+                if (isValidMove(row,col)) {
                     Board newBoard = new Board(this);
                     newBoard.makeMove(row, col, letter);
                     newBoard.flipOppDiscs(row,col,letter);
@@ -255,13 +255,16 @@ class Board {
     public int evaluate () {
 
         int score = 0;
+
         //For every square on the board
-        for (int i = 0; i < this.gameBoard.length; i++) {
+        for (int[] gameBoard1 : this.gameBoard) {
             for (int j = 0; j < this.gameBoard.length; j++) {
-                score += this.gameBoard[i][j];
+                score += gameBoard1[j];
             }
         }
+
         return score;
+
     }
 
     /**
@@ -283,9 +286,11 @@ class Board {
      * @return
      */
     public void setGameBoard(int[][] gameBoard) {
+
         for(int i = 0; i < this.dimension; i++) {
             System.arraycopy(gameBoard[i], 0, this.gameBoard[i], 0, this.dimension);
         }
+
     }
 
     /**
@@ -299,9 +304,8 @@ class Board {
         //Testing every square of the board until we find one that isn't empty
         for (int[] gameBoard1 : this.gameBoard) {
             for (int col = 0; col < this.gameBoard.length; col++) {
-                if (gameBoard1[col] == EMPTY) {
-                    return false;
-                }
+                if (gameBoard1[col] == EMPTY) return false;
+                
             }
         }
 
@@ -321,8 +325,8 @@ class Board {
     public void print() {
 
         System.out.println("──────────────────────────────────────────────────────────"+
-                "\n                       A B C D E F G H" +
-                "\n                     ┌─────────────────┐");
+                           "\n                       A B C D E F G H" +
+                           "\n                     ┌─────────────────┐");
 
         for(int row = 0; row < this.dimension; row++) {
             System.out.print("                   " + (row+1) + " │ ");
@@ -331,15 +335,14 @@ class Board {
                     case W -> System.out.print("● ");
                     case B -> System.out.print("○ ");
                     case EMPTY -> System.out.print(isValidMove(row, col) ? "⁙ " : "- ");
-                    default -> {
-                    }
+                    default -> { }
                 }
             }
             System.out.println("│");
         }
 
         System.out.println("                     └─────────────────┘"+
-                "\n──────────────────────────────────────────────────────────");
+                           "\n──────────────────────────────────────────────────────────");
 
     }
 
