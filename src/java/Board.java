@@ -10,11 +10,6 @@ import java.util.ArrayList;
  */
 class Board {
 
-    /*
-        For the black and white circles of the board,as well as the lines,
-        to show in cmd we need to run "chcp 65001" first.
-    */
-
     public static final int W = 1;      //If score > 0 => white is ahead
     public static final int B = -1;     //If score < 0 => black is ahead
     public static final int EMPTY = 0;  //If score = 0 => the game is tied
