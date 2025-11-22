@@ -28,7 +28,7 @@ class Player {
     }
 
     /**
-     * Method that implements the MiniMax algorithm and starts at depth 0.
+     * Method that implements the MiniMax algorithm with alpha beta pruning and starts at depth 0.
      * White => mazimixing player
      * Black => minimizing player
      *
@@ -38,7 +38,7 @@ class Player {
     public Move MiniMax(Board board) {
 
         Board newBoard = new Board(board);
-        return (playerLetter == Board.W) ? max(newBoard, 0) : min(newBoard, 0);
+        return (playerLetter == Board.W) ? max(newBoard, 0, Integer.MIN_VALUE, Integer.MAX_VALUE) : min(newBoard, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
     }
 
@@ -51,27 +51,25 @@ class Player {
      *
      * @param board : the game board at its current state
      * @param depth : the current depth in the MiniMax search
+     * @param alpha : the alpha value for the alpha beta pruning
+     * @param beta : the beta value for the alpha beta pruning
      * @return the best move determined by the MiniMax evaluation
      */
-    public Move max(Board board, int depth) {
+    public Move max(Board board, int depth, int alpha, int beta) {
 
-        if (depth == maxDepth || board.isTerminal()) {
-            Move m = new Move(board.evaluate());
-            return m;
-        }
+        if (depth == maxDepth || board.isTerminal()) return new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
 
         ArrayList<Board> children = board.getChildren(Board.W);
 
-        if (children.isEmpty()) {
-            Move m = min(board, depth + 1);
-            return m;
-        }
+        if (children.isEmpty()) return min(board, depth + 1, alpha, beta);
 
         Move bestMove = new Move(Integer.MIN_VALUE);
 
         for (Board child : children) {
-            Move result = min(child, depth + 1);
+            Move result = min(child, depth + 1, alpha, beta);
             if (result.getValue() > bestMove.getValue()) bestMove = new Move(child.getLastMove().getRow(), child.getLastMove().getCol(), result.getValue());
+            alpha = Math.max(alpha, result.getValue());
+            if (alpha >= beta) break;
         }
 
         return bestMove;
@@ -87,27 +85,25 @@ class Player {
      *
      * @param board : the game board at its current state
      * @param depth : the current depth in the MiniMax search
+     * @param alpha : the alpha value for the alpha beta pruning
+     * @param beta : the beta value for the alpha beta pruning
      * @return the best move determined by the MiniMax evaluation
      */
-    public Move min(Board board, int depth) {
+    public Move min(Board board, int depth, int alpha, int beta) {
 
-        if (depth == maxDepth || board.isTerminal()) {
-            Move m = new Move(board.evaluate());
-            return m;
-        }
+        if (depth == maxDepth || board.isTerminal()) return new Move(board.getLastMove().getRow(), board.getLastMove().getCol(), board.evaluate());
 
         ArrayList<Board> children = board.getChildren(Board.B);
 
-        if (children.isEmpty()) {
-            Move m = max(board, depth + 1);
-            return m;
-        }
+        if (children.isEmpty()) return max(board, depth + 1, alpha, beta);
 
         Move bestMove = new Move(Integer.MAX_VALUE);
 
         for (Board child : children) {
-            Move result = max(child, depth + 1);
+            Move result = max(child, depth + 1, alpha, beta);
             if (result.getValue() < bestMove.getValue()) bestMove = new Move(child.getLastMove().getRow(), child.getLastMove().getCol(), result.getValue());
+            beta = Math.min(beta, result.getValue());
+            if (alpha >= beta) break;
         }
 
         return bestMove;

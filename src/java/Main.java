@@ -4,6 +4,7 @@
  */
 
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Main {
 
@@ -12,25 +13,25 @@ public class Main {
         Scanner in = new Scanner(System.in);
         
         //-------------------Requesting the max depth for the MiniMax algorithm from the user-------------------
-        System.out.println("──────────Insert the max depth for the algorithm──────────");
+        System.out.println("─────────────Choose the difficulty of the game────────────");
+        System.out.println("▪ Beginner \n▪ Intermediate \n▪ Hard \n▪ Expert");
         System.out.print("> ");
-        String depth = in.nextLine();
+        String difficulty = in.nextLine();
+
+        while (!Arrays.asList("beginner", "intermediate", "hard","expert").contains(difficulty.toLowerCase())) {
+            System.out.println("Invalid input! Please choose one of the following options:");
+            System.out.println("▪ Beginner \n▪ Intermediate \n▪ Hard \n▪ Expert");
+            System.out.print("> ");
+            difficulty = in.nextLine();
+        }
 
         int max_depth;
-
-        while (true) {
-            try {
-                max_depth = Integer.parseInt(depth);
-                if (max_depth <= 0){
-                    System.out.println("Invalid input! Please insert the max depth");
-                    System.out.print("> ");
-                    depth = in.nextLine();
-                } else break;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input type! Please insert the max depth");
-                System.out.print("> ");
-                depth = in.nextLine();
-            }
+        switch (difficulty.toLowerCase()){
+            case "beginner" -> max_depth = 2;
+            case "intermediate" -> max_depth = 4;
+            case "hard" -> max_depth = 6;
+            case "expert" -> max_depth = 10;
+            default -> max_depth = 2;
         }
         //------------------------------------------------------------------------------------------------------
 
