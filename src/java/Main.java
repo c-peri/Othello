@@ -14,23 +14,25 @@ public class Main {
         
         //-------------------Requesting the max depth for the MiniMax algorithm from the user-------------------
         System.out.println("─────────────Choose the difficulty of the game────────────");
-        System.out.println("▪ Beginner \n▪ Intermediate \n▪ Hard \n▪ Expert");
-        System.out.print("> ");
-        String difficulty = in.nextLine();
+        String difficulty = "";
+        while (true) {
 
-        while (!Arrays.asList("beginner", "intermediate", "hard","expert").contains(difficulty.toLowerCase())) {
-            System.out.println("Invalid input! Please choose one of the following options:");
-            System.out.println("▪ Beginner \n▪ Intermediate \n▪ Hard \n▪ Expert");
+            System.out.println("1) Beginner \n2) Intermediate \n3) Hard \n4) Expert");
             System.out.print("> ");
             difficulty = in.nextLine();
+
+            if (Arrays.asList("beginner", "intermediate", "hard", "expert", "1", "2", "3", "4").contains(difficulty.toLowerCase())) break;
+
+            System.out.println("Invalid input! Please choose one of the following options:");
+
         }
 
         int max_depth;
         switch (difficulty.toLowerCase()){
-            case "beginner" -> max_depth = 2;
-            case "intermediate" -> max_depth = 4;
-            case "hard" -> max_depth = 6;
-            case "expert" -> max_depth = 10;
+            case "beginner", "1" -> max_depth = 2;
+            case "intermediate", "2" -> max_depth = 4;
+            case "hard", "3" -> max_depth = 6;
+            case "expert", "4" -> max_depth = 10;
             default -> max_depth = 2;
         }
         //------------------------------------------------------------------------------------------------------
@@ -53,14 +55,14 @@ public class Main {
             System.out.print("> ");
             pl = in.nextLine().trim();
 
-            if (pl.equalsIgnoreCase("White") || pl.equalsIgnoreCase("Black")) break;
+            if (pl.matches("(?i)w(hite)?") || pl.matches("(?i)b(lack)?")) break;
 
-            System.out.println("Invalid input! Please choose one of the following players");
+            System.out.println("Invalid input! Please choose one of the following players:");
 
         }
 
-        Player pc = pl.equalsIgnoreCase("White") ? playerB : playerW; //Assingning the remaining player to the A.I.
-        int pcLetter = pl.equalsIgnoreCase("White") ? Board.B : Board.W;
+        Player pc = pl.matches("(?i)w(hite)?") ? playerB : playerW; //Assingning the remaining player to the A.I.
+        int pcLetter = pl.matches("(?i)w(hite)?") ? Board.B : Board.W;
         //------------------------------------------------------------------------------------------------------
 
         boolean forfeit = false; //No valid moves on the board for any player => forfeit = true
@@ -88,7 +90,7 @@ public class Main {
                 //------------------------------------------Black players turn------------------------------------------
                 case Board.W -> {
                     
-                    if (pl.equalsIgnoreCase("Black")) { //If the player chose to play with the black player
+                    if (pl.matches("(?i)b(lack)?")) { //If the player chose to play with the black player
 
                         boolean found = false; //Determining whether the player's turn will be forfeited
                         for (int i = 0; i <= 7; i++) {
@@ -112,10 +114,10 @@ public class Main {
                             }
                             int row_int = Integer.parseInt(row)-1;
                             System.out.print("Insert a column: ");
-                            String col = in.nextLine();
+                            String col = in.nextLine().toUpperCase();
                             while (!col.matches("[A-H]")) {
                                 System.out.print("Invalid column! Please enter a letter from A to H: ");
-                                col = in.nextLine();
+                                col = in.nextLine().toUpperCase();
                             }
                             int col_int = col.charAt(0) - 'A';
 
@@ -171,7 +173,7 @@ public class Main {
                 //------------------------------------------White players turn------------------------------------------
                 case Board.B -> {
 
-                    if (pl.equalsIgnoreCase("White")) { //If the player chose to play with the white player
+                    if (pl.matches("(?i)w(hite)?")) { //If the player chose to play with the white player
 
                         boolean found = false; //Determining whether the player's turn will be forfeited
                         for (int i = 0; i <= 7; i++) {
@@ -195,10 +197,10 @@ public class Main {
                             }
                             int row_int = Integer.parseInt(row)-1;
                             System.out.print("Insert a column: ");
-                            String col = in.nextLine();
+                            String col = in.nextLine().toUpperCase();
                             while (!col.matches("[A-H]")) {
                                 System.out.print("Invalid column! Please enter a letter from A to H: ");
-                                col = in.nextLine();
+                                col = in.nextLine().toUpperCase();
                             }
                             int col_int = col.charAt(0) - 'A';
 
