@@ -137,6 +137,23 @@ class Board {
     }
 
     /**
+     * Method to check if the board has any valid moves.
+     *
+     * @return boolean
+     */
+    public boolean hasValidMove() {
+
+        for (int i = 0; i <= 7; i++) {
+            for (int j = 0; j <= 7; j++) {
+                if (this.isValidMove(i,j)) return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
      * Method to flip the opponent's discs. For each of the 8 directions of the move, we will run along the path until:
      * We find a disc of the same colour => we flip all the in between discs of the opposite colour
      * We reach an EMPTY spot => end the search of that path

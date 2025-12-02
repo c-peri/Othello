@@ -92,18 +92,7 @@ public class Main {
                     
                     if (pl.matches("(?i)b(lack)?")) { //If the player chose to play with the black player
 
-                        boolean found = false; //Determining whether the player's turn will be forfeited
-                        for (int i = 0; i <= 7; i++) {
-                            for (int j = 0; j <= 7; j++) {
-                                if (board.isValidMove(i,j)) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (found) break;
-                        }
-
-                        if (found) { //If they have a valid move for this round
+                        if (board.hasValidMove()) { //If they have a valid move for this round
 
                             System.out.println("────────────────Black player make your move───────────────");
                             System.out.print("Insert a row: ");
@@ -139,6 +128,8 @@ public class Main {
                             forfeit_counter++;
                             board.setLastPlayer(-board.getLastPlayer());
 
+                            if (board.hasValidMove()) board.print();
+
                         }
                         
                     } else { //If the A.I. plays with the black player
@@ -163,6 +154,8 @@ public class Main {
                             forfeit_counter++;
                             board.setLastPlayer(-board.getLastPlayer());
 
+                            if (board.hasValidMove()) board.print();
+
                         }
                         
                     }
@@ -175,18 +168,7 @@ public class Main {
 
                     if (pl.matches("(?i)w(hite)?")) { //If the player chose to play with the white player
 
-                        boolean found = false; //Determining whether the player's turn will be forfeited
-                        for (int i = 0; i <= 7; i++) {
-                            for (int j = 0; j <= 7; j++) {
-                                if (board.isValidMove(i,j)) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (found) break;
-                        }
-
-                        if (found) { //If they have a valid move for this round
+                        if (board.hasValidMove()) { //If they have a valid move for this round
 
                             System.out.println("────────────────White player make your move───────────────");
                             System.out.print("Insert a row: ");
@@ -222,6 +204,8 @@ public class Main {
                             forfeit_counter++;
                             board.setLastPlayer(-board.getLastPlayer());
 
+                            if (board.hasValidMove()) board.print();
+
                         }
                         
                     } else { //If the A.I. plays with the white player
@@ -245,6 +229,8 @@ public class Main {
                             System.out.println("There are no valid moves, white player's turn is forfeited");
                             forfeit_counter++;
                             board.setLastPlayer(-board.getLastPlayer());
+
+                            if (board.hasValidMove()) board.print();
 
                         }
                         
