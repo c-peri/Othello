@@ -29,7 +29,7 @@ class Player {
 
     /**
      * Method that implements the MiniMax algorithm with alpha beta pruning and starts at depth 0.
-     * White => mazimixing player
+     * White => maximizing player
      * Black => minimizing player
      *
      * @param board : the game board at its current state
