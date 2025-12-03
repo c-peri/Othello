@@ -65,25 +65,10 @@ public class Main {
         int pcLetter = pl.matches("(?i)w(hite)?") ? Board.B : Board.W;
         //------------------------------------------------------------------------------------------------------
 
-        boolean forfeit = false; //No valid moves on the board for any player => forfeit = true
         int forfeit_counter = 0; //A player forfeits their turn => forfeit_counter += 1
 
         //----------------------------------------Loop for the game board---------------------------------------
-        while (!board.isTerminal() && !forfeit && forfeit_counter < 2) {
-
-            //------------------Checking for any valid moves on the board, otherwise the game ends------------------
-            for (int row = 0; row <= 7; row++) {
-                for (int col = 0; col <= 7; col++) {
-                    if (board.isValidMove(row,col)) {
-                        forfeit = false;
-                        break;
-                    }
-                }
-                if (!forfeit) break;
-            }
-
-            if (forfeit) break;
-            //------------------------------------------------------------------------------------------------------
+        while (!board.isTerminal() && forfeit_counter < 2) {
 
             switch (board.getLastPlayer()){
 
@@ -102,6 +87,7 @@ public class Main {
                                 row = in.nextLine();
                             }
                             int row_int = Integer.parseInt(row)-1;
+
                             System.out.print("Insert a column: ");
                             String col = in.nextLine().toUpperCase();
                             while (!col.matches("[A-H]")) {
@@ -112,12 +98,16 @@ public class Main {
 
                             //Making the move depending on if it's valid or not
                             if (board.isValidMove(row_int,col_int)) {
+
                                 board.makeMove(row_int,col_int,-1);
                                 board.flipOppDiscs(row_int, col_int, -1);
                                 board.setLastMove(new Move(row_int,col_int));
                                 board.setLastPlayer(-1);
+
                                 System.out.println("──────────────────────────────────────────────────────────");
+
                                 board.print();
+
                             } else {
                                 System.out.println("Invalid move! Please make a new move");
                             }
@@ -178,6 +168,7 @@ public class Main {
                                 row = in.nextLine();
                             }
                             int row_int = Integer.parseInt(row)-1;
+
                             System.out.print("Insert a column: ");
                             String col = in.nextLine().toUpperCase();
                             while (!col.matches("[A-H]")) {
@@ -188,12 +179,16 @@ public class Main {
 
                             //Making the move depending on if it's valid or not
                             if (board.isValidMove(row_int,col_int)) {
+
                                 board.makeMove(row_int,col_int,1);
                                 board.flipOppDiscs(row_int, col_int, 1);
                                 board.setLastMove(new Move(row_int,col_int));
                                 board.setLastPlayer(1);
+
                                 System.out.println("──────────────────────────────────────────────────────────");
+
                                 board.print();
+
                             } else {
                                 System.out.println("Invalid move! Please make a new move");
                             }
